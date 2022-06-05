@@ -162,7 +162,7 @@ int main(int argc, char* argv[])
         if(curl)
         {
             CURLcode res;
-            curl_easy_setopt(curl, CURLOPT_URL, "example.com");
+            curl_easy_setopt(curl, CURLOPT_URL, argv[1]);
             res = curl_easy_perform(curl);
             if(res != CURLE_OK)
                 fprintf(stderr, "curl_easy_perform() failed: %s\n",
