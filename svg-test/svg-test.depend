@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1650300030 source:e:\Прога\lab\lab03\lab03\svg.cpp
+	"svg.h"
+
+1650298943 e:\Прога\lab\lab03\lab03\svg.h
+	<iostream>
+	<vector>
+
+1650300099 source:e:\Прога\lab\lab03\lab03\real-test.svg.cpp
+	"svg.h"
+	<cassert>
+
+1650283244 e:\Прога\lab\lab03\lab03\test.h
+	<vector>
+

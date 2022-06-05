@@ -1,0 +1,69 @@
+# depslib dependency file v1.0
+1654452462 source:e:\Прога\lab\lab03\lab03\main.cpp
+	<iostream>
+	<math.h>
+	<conio.h>
+	<string.h>
+	<vector>
+	<windows.h>
+	"test.h"
+	"svg.h"
+	<curl/curl.h>
+
+1650283244 e:\Прога\lab\lab03\lab03\test.h
+	<vector>
+
+1650287271 source:e:\Прога\lab\lab03\lab03\test.cpp
+	"test.h"
+
+1654337754 e:\Прога\lab\lab03\lab03\svg.h
+	<iostream>
+	<vector>
+
+1654338253 source:e:\Прога\lab\lab03\lab03\svg.cpp
+	"svg.h"
+
+1654445256 e:\Прога\lab\lab03\lab03\curl\include\curl\curl.h
+	"curlver.h"
+	"system.h"
+	<stdio.h>
+	<limits.h>
+	<osreldate.h>
+	<sys/types.h>
+	<time.h>
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/select.h>
+	<sys/socket.h>
+	<sys/time.h>
+	"easy.h"
+	"multi.h"
+	"urlapi.h"
+	"options.h"
+	"header.h"
+	"typecheck-gcc.h"
+
+1654445256 e:\Прога\lab\lab03\lab03\curl\include\curl\curlver.h
+
+1654445257 e:\Прога\lab\lab03\lab03\curl\include\curl\system.h
+	<winsock2.h>
+	<windows.h>
+	<ws2tcpip.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<sys/poll.h>
+
+1654445256 e:\Прога\lab\lab03\lab03\curl\include\curl\easy.h
+
+1654445257 e:\Прога\lab\lab03\lab03\curl\include\curl\multi.h
+	"curl.h"
+
+1654445257 e:\Прога\lab\lab03\lab03\curl\include\curl\urlapi.h
+	"curl.h"
+
+1654445257 e:\Прога\lab\lab03\lab03\curl\include\curl\options.h
+
+1654445256 e:\Прога\lab\lab03\lab03\curl\include\curl\header.h
+
+1654445257 e:\Прога\lab\lab03\lab03\curl\include\curl\typecheck-gcc.h
+
