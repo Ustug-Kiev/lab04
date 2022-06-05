@@ -154,19 +154,27 @@ read_input(istream& in, size_t number_count, bool promt)
 
 int main(int argc, char* argv[])
 {
+    curl_global_init(CURL_GLOBAL_ALL);
 
-    if (argc >1)
+    if(argc>1)
     {
-        cout << "argc = " << argc << endl;
-        for (size_t i =0; i<argc; i++)
+        CURL *curl = curl_easy_init();
+        if(curl)
         {
-            cout << "argv[" << i << "] = " << argv[i] << endl;
+            CURLcode res;
+            curl_easy_setopt(curl, CURLOPT_URL, "example.com");
+            res = curl_easy_perform(curl);
+            if(res != CURLE_OK)
+                fprintf(stderr, "curl_easy_perform() failed: %s\n",
+                        curl_easy_strerror(res));
+            curl_easy_cleanup(curl);
         }
         return 0;
     }
 
 
-    curl_global_init(CURL_GLOBAL_ALL);
+
+
 
     size_t number_count;
 
