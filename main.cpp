@@ -194,6 +194,7 @@ download(const string& address)
 
 
 DWORD WINAPI GetVersion(void);
+#define INFO_BUFFER_SIZE 20
 
 int main(int argc, char* argv[])
 {
@@ -209,8 +210,13 @@ int main(int argc, char* argv[])
 
     if ((info & 0x40000000) == 0) {
         DWORD build = platform;
-        printf(" (build %u)", build);
+        printf(" (build %u)\n", build);
     }
+
+    char  infoBuf[INFO_BUFFER_SIZE];
+    DWORD  bufCharCount = INFO_BUFFER_SIZE;
+    GetComputerNameA(infoBuf, &bufCharCount);
+    printf("Computer name: %s", infoBuf);
     return 0;
 
     Input input;
