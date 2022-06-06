@@ -1,16 +1,14 @@
 # depslib dependency file v1.0
-1654487809 source:e:\Прога\lab\lab03\lab03\main.cpp
+1654497397 source:e:\Прога\lab\lab03\lab03\main.cpp
 	<iostream>
-	<math.h>
-	<conio.h>
-	<string.h>
 	<vector>
-	<windows.h>
-	"test.h"
-	"svg.h"
+	<math.h>
 	<sstream>
 	<string>
+	"svg.h"
 	<curl/curl.h>
+	<ctime>
+	<windows.h>
 
 1650283244 e:\Прога\lab\lab03\lab03\test.h
 	<vector>
@@ -18,12 +16,18 @@
 1650287271 source:e:\Прога\lab\lab03\lab03\test.cpp
 	"test.h"
 
-1654459975 e:\Прога\lab\lab03\lab03\svg.h
-	<iostream>
+1654495227 e:\Прога\lab\lab03\lab03\svg.h
 	<vector>
+	<string>
+	<iostream>
+	<iostream>
+	<sstream>
+	<vector>
+	<windows.h>
 
-1654472369 source:e:\Прога\lab\lab03\lab03\svg.cpp
+1654497323 source:e:\Прога\lab\lab03\lab03\svg.cpp
 	"svg.h"
+	"SVG.h"
 
 1654445256 e:\Прога\lab\lab03\lab03\curl\include\curl\curl.h
 	"curlver.h"

@@ -1,101 +1,58 @@
 #include <iostream>
-#include <math.h>
-#include <conio.h>
-#include <string.h>
 #include <vector>
-#include<windows.h>
-#pragma hdrstop
-#include "test.h"
-#include "svg.h"
+#include <math.h>
 #include <sstream>
 #include <string>
-#include <curl/curl.h>
+#include "svg.h"
 
+#include <curl/curl.h>
+#include <ctime>
+#include <windows.h>
+#pragma once
 using namespace std;
 
-
-vector <double>
-input_numbers(istream& in, size_t count)
+vector<double>
+input_numbers( istream& in,size_t count)
 {
-    vector <double> result(count);
-    for (size_t i=0; i<count; i++)
+    vector<double> result(count);
+    for (size_t i = 0; i < count; i++)
     {
-        cerr << i << ")";
         in >> result[i];
     }
     return result;
 }
 
-
-
-
-void show_gistogram (const auto bins, size_t number_count)
-{
-    size_t screen_width;
-    cerr << "Enter screen width" << endl;
-    cin >> screen_width;
-    while (screen_width < 7 || screen_width > 80000 || screen_width < number_count/3)
-    {
-        if (screen_width < 7)
-        {
-            cerr << "Too less screen width" << endl;
-        }
-        if (screen_width >80)
-        {
-            cerr << "Too large screen width" << endl;
-        }
-        if (screen_width < number_count/3)
-        {
-            cerr << "its nessesary to be more then 1/3 of number count" << endl;
-        }
-        cerr << endl;
-        cin >> screen_width;
-
-    }
-
-
-    const size_t max_aster = screen_width - 3 -1;
-    size_t max_bin = bins[0];
-    for (size_t bin:bins)
-    {
-        if (max_bin<bin)
-        {
-            max_bin = bin;
-        }
-    }
-
-
-
-    for (size_t bin : bins)
-    {
-        size_t hei = bin;
-        // нужно ли масштабировать
-        if (max_bin > max_aster)
-        {
-            hei = max_aster * (static_cast<double> (bin) / max_bin);
-        }
-        if(bin<100)
-        {
-            cout << " ";
-        }
-        if (bin<10)
-        {
-            cout << " ";
-        }
-        cout << bin << "|";
-        for (size_t i = 0; i < hei; i++)
-        {
-            cout << "*";
-        }
-        cout << endl;
-    }
-
-}
-
 vector<double>
-make_histogram(Input data)
+make_histogram(Input data,size_t nowbins,bool flag)
 {
+    if(flag)
+    {
     double min,max;
+    find_minmax(data.numbers,min,max);
+    vector<double> bins(nowbins,0);
+    double bin_size = (max - min) / nowbins;
+    for(size_t i=0; i<data.numbers.size(); i++)
+    {
+        bool found=false;
+        for(size_t j=0; j<(nowbins-1) && !found; j++)
+        {
+            auto lo = min + j*bin_size;
+            auto hi = min + (j + 1)*bin_size;
+            if((lo <= data.numbers[i]) && (data.numbers[i]<hi))
+            {
+                bins[j]++;
+                found =true;
+            }
+        }
+        if(!found)
+        {
+            bins[nowbins-1]++;
+        }
+    }
+    return bins;
+    }
+    else{
+        double min,max;
     find_minmax(data.numbers,min,max);
     vector<double> bins(data.bin_count,0);
     double bin_size = (max - min) / data.bin_count;
@@ -118,43 +75,70 @@ make_histogram(Input data)
         }
     }
     return bins;
+    }
 }
 
-
 Input
-read_input(istream& in, bool promt)
- {
+read_input(istream& in,bool prompt) {
     Input data;
-
-    if (promt)
-    {
-        cerr << "Enter number count: ";
-    }
+    if(prompt)
+    cerr << "Enter number count: ";
     size_t number_count;
     in >> number_count;
 
-    if (promt)
-    {
-        cerr << "Enter numbers: ";
-    }
+    if(prompt)
+    cerr << "Enter numbers: ";
+    data.numbers = input_numbers(in,number_count);
 
-    data.numbers = input_numbers(in, number_count);
-
-    // ...
-    if (promt)
-    {
-        cerr << "Enter bin count: ";
-    }
-
+    if(prompt)
+    cerr <<"Enter bin count:";
     in >> data.bin_count;
-
 
     return data;
 }
 
+
+void
+show_histogram_text(const vector<double>bins)
+{
+    const size_t SCREEN_WIDTH = 80;
+    const size_t MAX_ASTERISK = SCREEN_WIDTH - 3 - 1;
+
+    size_t max_bin = bins[0];
+    for(size_t bin:bins)
+    {
+        if(max_bin<bin)
+        {
+            max_bin=bin;
+        }
+    }
+
+
+    for(size_t bin:bins)
+    {
+        size_t height = bin;
+
+        if (height > MAX_ASTERISK)
+        {
+            height = MAX_ASTERISK * (static_cast<double>(bin) /max_bin);
+        }
+        if(bin<100)
+            for(size_t i=0; i<(MAX_ASTERISK-bin); i++)
+            {
+                cout<<" ";
+            }
+        for(size_t i=0; i< height; i++)
+        {
+            cout<<"*";
+
+        }
+
+        cout <<"|" << bin;
+        cout << endl;
+    }
+}
 size_t
-write_data(void* items, size_t item_size, size_t item_count, void* ctx)
- {
+write_data(void* items, size_t item_size, size_t item_count, void* ctx) {
     size_t data_size = item_size * item_count;
     stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
     buffer->write(reinterpret_cast<char*>(items), data_size);
@@ -164,67 +148,65 @@ write_data(void* items, size_t item_size, size_t item_count, void* ctx)
 Input
 download(const string& address)
 {
-    curl_global_init(CURL_GLOBAL_ALL);
     stringstream buffer;
     CURL *curl = curl_easy_init();
     if(curl)
     {
-        double total;
-
         CURLcode res;
         curl_easy_setopt(curl, CURLOPT_URL, address.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
         res = curl_easy_perform(curl);
-        if(res != CURLE_OK)
-        {
+        if(res != CURLE_OK){
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
                     curl_easy_strerror(res));
-            exit(1);
+                    exit(1);
         }
 
         curl_easy_cleanup(curl);
-        curl_easy_getinfo(curl, CURLINFO_TOTAL_TIME, &total);
-        cerr << "total time = " << total << endl;
-
     }
 
     return read_input(buffer, false);
 }
 
-
-DWORD WINAPI GetVersion(void);
-#define INFO_BUFFER_SIZE 20
-
 int main(int argc, char* argv[])
 {
-
-
-    DWORD info = GetVersion();
-    DWORD mask = 0x0000ffff;
-    DWORD version = info & mask;
-    DWORD platform = info >> 16;
-    DWORD version_minor = version >> 8;
-    DWORD version_major = version & 0x0000ff;
-    printf("Windows v%u.%u", version_major, version_minor);
-
-    if ((info & 0x40000000) == 0) {
-        DWORD build = platform;
-        printf(" (build %u)\n", build);
-    }
-
-    char  infoBuf[INFO_BUFFER_SIZE];
-    DWORD  bufCharCount = INFO_BUFFER_SIZE;
-    GetComputerNameA(infoBuf, &bufCharCount);
-    printf("Computer name: %s", infoBuf);
-    return 0;
-
     Input input;
 
 
+
+    curl_global_init(CURL_GLOBAL_ALL);
+    size_t newbins;
+    bool flag;
+    for(size_t i =0; i<argc ; i++)
+    {
+        if (strstr(argv[i], "-bins"))
+        {
+            newbins=i+1;
+            if((argc - newbins) < 2 )
+            {
+                flag=false;
+                cerr<<" No bins";
+                return 0;
+            }
+            break;
+        }
+    }
+    size_t nowbins = atoi(argv[newbins]);
     if (argc > 1)
     {
-        input = download(argv[1]);
+        size_t index;
+        if(newbins==2)
+        {
+            flag=true;
+            index=3;
+
+        }
+        else
+        {
+            index=1;
+        }
+        input = download(argv[index]);
     }
     else
     {
@@ -232,11 +214,9 @@ int main(int argc, char* argv[])
     }
 
 
+     const auto bins = make_histogram(input,nowbins,flag);
 
-
-    const auto bins = make_histogram(input);
     show_histogram_svg(bins);
-
-
     return 0;
 }
+
