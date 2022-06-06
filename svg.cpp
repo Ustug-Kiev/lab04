@@ -33,14 +33,14 @@ void svg_rect(double x, double y, double width, double height,string stroke, str
 
 
 void
-show_histogram_svg(const vector<double> bins, size_t numbers)
+show_histogram_svg(const vector<double> bins)
 {
     const auto BLOCK_WIDTH = 10;
 
     double gistogram_width;
     cerr << "Enter gistogram width : ";
     cin >> gistogram_width;
-    while (check((numbers), gistogram_width) == false)
+    while (check(sizeof(bins), gistogram_width) == false)
     {
         cerr << "There is erorr" << endl;
         cin >> gistogram_width;
