@@ -193,10 +193,26 @@ download(const string& address)
 }
 
 
-
+DWORD WINAPI GetVersion(void);
 
 int main(int argc, char* argv[])
 {
+
+
+    DWORD info = GetVersion();
+    DWORD mask = 0x0000ffff;
+    DWORD version = info & mask;
+    DWORD platform = info >> 16;
+    DWORD version_minor = version >> 8;
+    DWORD version_major = version & 0x0000ff;
+    printf("Windows v%u.%u", version_major, version_minor);
+
+    if ((info & 0x40000000) == 0) {
+        DWORD build = platform;
+        printf(" (build %u)", build);
+    }
+    return 0;
+
     Input input;
 
 
