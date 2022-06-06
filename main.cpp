@@ -195,25 +195,19 @@ download(const string& address)
 
 
 
+
+
 int main(int argc, char* argv[])
 {
-    Input input;
 
-
-    if (argc > 1)
-    {
-        input = download(argv[1]);
-    }
-    else
-    {
-        input = read_input(cin, true);
-    }
+    const char* name = "Commander Shepard";
+    int year = 2154;
+    printf("%s was born in %d.\n", name, year);
+    printf("n = %08x\n", 0x1234567); // 01234567
 
 
 
 
-    const auto bins = make_histogram(input);
-    show_histogram_svg(bins);
 
 
     return 0;
